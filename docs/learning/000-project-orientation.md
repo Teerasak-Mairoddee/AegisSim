@@ -107,7 +107,9 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 
 1. Awaiting my answer.
 2. Awaiting my answer.
-3. Awaiting my answer.
+3. **First attempt (2026-10-13):** ".meta may include dependencies to build the libraries"
+   - *Feedback:* Partly right. `Library/` is indeed rebuilt from what's committed, so it never needs to be in Git. The missing piece: each `.meta` file holds the asset's **GUID** (its permanent ID) and its import settings. Scenes and prefabs refer to assets by GUID, not by file name, so a missing `.meta` makes Unity generate a new GUID on the next machine and every reference to that asset breaks.
+   - *Second attempt:* Awaiting my answer.
 
 ## 11. Evidence
 
