@@ -109,7 +109,8 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 2. Awaiting my answer.
 3. **First attempt (2026-10-13):** ".meta may include dependencies to build the libraries"
    - *Feedback:* Partly right. `Library/` is indeed rebuilt from what's committed, so it never needs to be in Git. The missing piece: each `.meta` file holds the asset's **GUID** (its permanent ID) and its import settings. Scenes and prefabs refer to assets by GUID, not by file name, so a missing `.meta` makes Unity generate a new GUID on the next machine and every reference to that asset breaks.
-   - *Second attempt:* Awaiting my answer.
+   - *Second attempt (2026-10-13), answering "a material's `.meta` is missing; what does a teammate see?":* "they see missing references / no assets/asset names"
+   - *Feedback:* Correct on the key point: the scene shows **missing references** (a material slot reads "Missing", and URP draws the object magenta). One refinement: the material file itself is still in the Project window with its name. Unity just gives it a brand-new GUID, so nothing that pointed at the old GUID can find it. **Status: understood (shown by answer).**
 
 ## 11. Evidence
 
