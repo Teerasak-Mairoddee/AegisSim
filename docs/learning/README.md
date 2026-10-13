@@ -21,6 +21,19 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-13: Unity project and first test (M0)
+
+- **What we built:** Cloned the repo to my PC, created the Unity 6000.6.5f1 URP project in `unity/AegisSim/`, and created the four assemblies (`AegisSim.Core` with No Engine References, `AegisSim.Runtime`, `AegisSim.Tests.EditMode`, `AegisSim.Tests.PlayMode`) with a placeholder Edit Mode test. My first commits: `6b6568e`, `cefbca8`.
+- **What was covered** (my understanding is evidenced only where the answers below show it): What `git clone`, `git log`, branches and `push -u` do; that `.gitignore` keeps generated folders out (A2); that an assembly definition is a wall that controls what code can reference; that No Engine References makes Unity invisible to Core at compile time; what `[Test]` and `Assert` do.
+- **Questions answered:** Commit count prediction (said 2, then 3; actual 4, I missed the two commits recording my answers). A2 prediction correct. Probe experiment: first predicted it would control a position (misconception, corrected), result was a compile error. "Why ban Unity in Core?": partly understood. A6 prediction ("1 test, green, because it cannot fail") correct. Details in [000](000-project-orientation.md).
+- **Mistakes and corrections:** First clone landed in `AegisSim\AegisSim` because the folder already existed; I deleted my local copy and re-cloned. Unity's "Tests Assembly Folder" menu did not create an assembly for me, so I built the test assemblies by hand. A review of my `.asmdef` files found four issues (PlayMode used the Editor TestRunner, EditMode not Editor-only, Core had no root namespace, a leftover folder); all fixed and re-checked.
+- **Tests and results:** A2 pass; A6 pass (1 passed, 0 failed, Edit Mode, manual run). See [test strategy](../testing/test-strategy.md).
+- **Files changed:** `unity/AegisSim/` (new project), `Assets/_Project/**` (assemblies, test), this journal, orientation note, test strategy, backlog.
+- **Decisions:** Code lives under `Assets/_Project/` (as in RoverCore). Tonight's work goes through branch `m0-unity-setup` and a pull request.
+- **Blockers:** None.
+- **Next smallest task:** Review and merge the pull request, then verify the command-line test run (M0-4) and answer the M0 learning gate.
+- **Retrieval question for next session:** Why does the PlayMode test assembly reference `UnityEngine.TestRunner` but not `UnityEditor.TestRunner`?
+
 ### 2026-10-12: Kick-off (M0)
 
 - **What we built:** No code. Agreed the learning plan and Milestone 0 scope; drafted this repository's foundation (README, CLAUDE.md, docs skeleton, ADR 0001, backlog).

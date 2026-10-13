@@ -30,8 +30,11 @@ Tests are added with each feature, not afterwards. Every test states **what it p
 
 | Date | Milestone | Suite | Passed | Failed | Notes |
 |---|---|---|---|---|---|
-| (none yet) | | | | | |
+| 2026-10-13 | M0 | Edit Mode (`PlaceholderTests`), run manually in Test Runner on Tee's PC | 1 | 0 | A6: proves the test assembly compiles and is discovered; proves nothing about simulation behaviour |
+| 2026-10-13 | M0 | Repo hygiene (A2): `git status` after opening Unity | pass | – | Only `.vsconfig`, `Assets`, `Packages`, `ProjectSettings` tracked; `Library`, `Temp`, `Logs`, `UserSettings` ignored |
 
 ## Known limitations
 
-- No tests exist yet (M0).
+- Only a placeholder test exists (M0). No simulation logic is tested yet.
+- The command-line test run (M0-4) has not been verified.
+- No Play Mode test exists yet; the Play Mode assembly is untested wiring.

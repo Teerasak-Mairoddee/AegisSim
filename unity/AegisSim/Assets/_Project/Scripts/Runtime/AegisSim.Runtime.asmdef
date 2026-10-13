@@ -1,0 +1,16 @@
+{
+    "name": "AegisSim.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2ee8c9bde0df2f245acf7918f13a8626"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

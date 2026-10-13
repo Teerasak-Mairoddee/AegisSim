@@ -89,6 +89,8 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 1. **Learning gate:** In your own words, what is the difference between simulation, perception, tracking, control and coordination?
 2. Which module is allowed to read a vehicle's true position, and why are the others not?
 3. Why does `.gitignore` exclude `Library/` but keep `.meta` files?
+4. (Experiment, 2026-10-13) A script in `AegisSim.Core` (No Engine References ticked) declares a `Vector3` field. What happens when you save it?
+5. Why do we *want* the compiler to stop us using Unity inside Core?
 
 ## 10. My answers
 
@@ -112,9 +114,19 @@ Open RoverCore and find one place where a Unity type would have been convenient 
    - *Second attempt (2026-10-13), answering "a material's `.meta` is missing; what does a teammate see?":* "they see missing references / no assets/asset names"
    - *Feedback:* Correct on the key point: the scene shows **missing references** (a material slot reads "Missing", and URP draws the object magenta). One refinement: the material file itself is still in the Project window with its name. Unity just gives it a brand-new GUID, so nothing that pointed at the old GUID can find it. **Status: understood (shown by answer).**
 
+4. **Prediction 1:** "this takes control of its world space position as an override?"
+   - *Feedback:* Misconception. `Probe` is a plain class, not a MonoBehaviour, so it never runs; the experiment is about compiling.
+   - **Prediction 2:** "unsure". Also noted before saving: "its setting a vector 3 without any values or references on what v is". *Feedback:* accurate reading; an unset `Vector3` field is legal and defaults to (0, 0, 0), so that isn't what matters here.
+   - **Result:** "unity engine could not be found" (compile error as soon as the file was saved). The wall works: Core cannot see `UnityEngine`.
+5. **Answer (after asking for clarification on what Core holds and what a test is):** "building code with the wrong environment. Avoids writing realtime events in during compilation which takes longer"
+   - *Feedback:* Partly right. "Wrong environment" is the key idea: Core logic must not depend on a scene. Separate assemblies do recompile faster, a real bonus. The main reason is testing: Edit Mode tests can call Core directly and check results in milliseconds, with no scene or Play mode. **Status: partly understood; revisit at M1 when the first real Core test is written.**
+
 ## 11. Evidence
 
 - Agreement to the plan: project thread, 2026-10-12 ("agreed").
+- Unity project committed by me: `6b6568e` (branch `m0-unity-setup`).
+- Assemblies and placeholder test committed by me: `cefbca8`.
+- Acceptance tests A2 and A6 passed on my PC, 2026-10-13 (see `docs/testing/test-strategy.md`).
 
 ## 12. Reflection
 
