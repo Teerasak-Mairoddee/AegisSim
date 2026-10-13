@@ -1,10 +1,10 @@
 # Backlog (M0–M2)
 
-Drafting copy. Each item becomes a GitHub issue with a milestone label once the repo exists. Later milestones are added only when M2 is close to done.
+The live backlog is [GitHub Issues](https://github.com/Teerasak-Mairoddee/AegisSim/issues) (labels `M0`, `M1`, `M2`, `lesson`, `learning-gate`; issues #1–#22). This file is the readable overview. Later milestones are added only when M2 is close to done.
 
 ## Milestone 0: Requirements and repository foundation
 
-- [ ] **M0-1 Push the repository foundation.** README, CLAUDE.md, `.gitignore`, `.gitattributes`, docs skeleton. *Done when:* A1, A3, A4 pass.
+- [x] **M0-1 Push the repository foundation.** README, CLAUDE.md, `.gitignore`, `.gitattributes`, docs skeleton. *Done when:* A1, A3, A4 pass.
 - [ ] **M0-2 Create the Unity project** in `unity/AegisSim/` (6000.6.5f1, URP template). *Done when:* the project opens and `git status` is clean afterwards (A2).
 - [ ] **M0-3 Create the assemblies and a placeholder test.** `AegisSim.Core` (`noEngineReferences`), `AegisSim.Runtime`, `AegisSim.Tests.EditMode`, `AegisSim.Tests.PlayMode`; one Edit Mode test that asserts `true`. *Done when:* Test Runner shows 1 passed (A6), recorded in `test-strategy.md`.
 - [ ] **M0-4 Verify command-line test runs.** *Done when:* the batch-mode command in CLAUDE.md produces a results XML, or the doc is corrected.
