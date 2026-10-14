@@ -89,7 +89,10 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
    - *Note:* units (m vs m/s vs m/s²) needed several explanations; step 1's position needed a worked hint. Steps 2 and 3 done unaided.
 3. "reaches 5m/s at step 5 and 6m/s for the step after"
    - *Feedback:* Step 5 correct. Step 6 is a misconception: once at the requested speed, `a = (5 − 5) ÷ 0.1 = 0`, so `v` stays 5 m/s.
-   - *Second attempt:* "5+10x0.1?" (still applied `a_max`). Claude then explained with the cruise-control example and the `a` formula. **Status: not yet shown; revisit with question 4.**
+   - *Second attempt:* "5+10x0.1?" (still applied `a_max`). Claude then explained with the cruise-control example and the `a` formula. 
+   - *Follow-up:* asked for another explanation ("why does requested speed change our a value"); Claude explained it as closing a speed **gap** (`gap ÷ dt`, capped at `a_max`; negative gap means braking).
+   - *My own example:* "so if the requested speed is 8m/s but our current speed is at 5m/s the values would account for the 3m/s difference in the request by accelerating but is capped at how hard it can push?"
+   - *Feedback:* Correct: needs 30 m/s², capped at 10, so 6, 7, then 8 m/s and holds. **Status: understood (own example, after re-explanation). Recheck with the retrieval question.**
 4. Awaiting my answer.
 
 ## 11. Evidence
