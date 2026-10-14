@@ -1,6 +1,6 @@
 # 002: Vehicle dynamics
 
-**Date and milestone:** 2026-10-14, Milestone 1 (nearly complete: question 4 to be answered again next session)
+**Date and milestone:** 2026-10-14, Milestone 1 (complete: question 4 answered with help in session 6; code and first test in M1-3)
 
 ## 1. Concept
 
@@ -36,7 +36,15 @@ Updating velocity before position is called **semi-implicit Euler** integration.
 
 ## 5. Implementation walkthrough
 
-Not built yet. M1-3 will put this step in Core and test it against the hand traces below.
+Built in session 6 (M1-3, 1D only), in `Core/Simulation` (namespace `AegisSim.Simulation`, the first Core module folder):
+
+- `VehicleState`: a `readonly struct` holding `Position` (m) and `Velocity` (m/s). Read-only so a state can't be changed by accident; a step returns a **new** state instead.
+- `VehicleDynamics.Step(state, requestedVelocity, maxAcceleration, dt)`: a static method doing the three lines in section 4. It throws `ArgumentOutOfRangeException` if `dt <= 0` or `maxAcceleration < 0`, so a bad input fails loudly instead of producing nonsense.
+- It never reads Unity's clock: `dt` is passed in. That is what lets an Edit Mode test step it directly (lesson 001).
+
+Test: `Tests/EditMode/VehicleDynamicsTests.cs`, `Step_FromRest_MatchesHandTrace`, checks steps 1 to 3 of Trace B. I filled in steps 2 and 3.
+
+Still to do in M1-3: 3D vectors with a magnitude speed limit, and tests for the limits.
 
 ## 6. Alternatives and trade-offs
 
@@ -61,6 +69,7 @@ Why it is acceptable: M1–M9 study navigation, separation, sensing and tracking
 - Mixing up units (m, m/s, m/s²).
 - Capping each axis separately: velocity (5, 5) passes a per-axis cap of 5 but moves at √50 ≈ 7.07 m/s (the classic game bug of faster diagonal movement).
 - Confusing `a_max` (limits how fast speed changes) with a top speed (limits speed itself).
+- Comparing decimals exactly. A `double` stores 0.1 slightly off (binary can't write 0.1 exactly, as decimal can't write 1/3), so 0.1 + 0.2 = 0.30000000000000004. Decimal checks use a tolerance: `Assert.AreEqual(0.3, actual, 1e-9)`. This is correct practice, not a weaker test.
 
 ## 8. Experiment
 
@@ -89,6 +98,14 @@ Hand traces (no code).
 
 Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
 
+**Code check (session 6, 2026-10-14):** the Edit Mode test runs steps 1–3 of Trace B through `VehicleDynamics.Step`.
+
+- *Prediction 1:* "it should pass assuming its doing the same calculations". *Result:* failed. I had written the step 2 and 3 checks but not the `Step` calls, so it was still checking step 1's state. I spotted the missing line with a hint ("state line?").
+- *Prediction 2:* "They should pass". *Result:* failed: "the values are different by a fraction of a decimal point" (floating-point error, section 7).
+- *Fix:* asked how to fix it, I first said "use a double as a variable so it unifies the variable" (misconception: it already uses `double`, which is the source of the error). After the ruler explanation I asked how to write the gap; Claude gave line 21, and I changed the 0.6 check myself. *Result:* all green.
+- *Comprehension check, "isn't adding `1e-9` cheating?":* "I would say the margin was minimal and its just a nuance of the mathematics. It does not change the result of what happens it just closes the miscommunication between the tested values and the answer."
+  - *Feedback:* Correct. Added: the test still catches real bugs, because a real mistake (for example 0.1 m out) is millions of times bigger than the 1e-9 gap. **Status: understood (own words).**
+
 ## 9. Comprehension questions
 
 1. Trace A: positions after steps 1–3.
@@ -114,6 +131,9 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
    - *Retrieval check (2026-10-14, session 5): "already at the requested 5 m/s; what is a?":* "a  would be: (requested speed - current speed) / dt so (5m/s-5m/s)/0.1 so a = 0". **Correct; confirms question 3.**
 4. Clarified "drones state regarding what point?" (any single moment). Answer: "step will determine our state and a_max caps the speed from going up forever"
    - *Feedback:* Two mix-ups. The step *changes* the state; the state is **position and velocity**. `a_max` limits how quickly speed changes, not the speed itself; the requested speed (gap → 0) stops it, plus a magnitude limit in 2D. **Status: not yet shown; ask again at the start of next session (answered late in a long evening).**
+   - *Asked again (session 6, 2026-10-14):* "Velocity & position, the value a" (state: position and velocity correct; `a` is worked out each step, not part of the state). Then "maximum acceleration value caps the speed" (same misconception).
+   - *Worked check, Trace B continued:* "step 3 = 3m/s and step 100 should be 0 because its already reached its max a value at this point", then "10", "2", and "based on 100+10*0.1 = 101". Arithmetic slip corrected: multiply before adding, so `10 + 10 × 0.1 = 11`, not 2. Claude explained with the bucket-and-tap analogy (`a_max` is how far the tap opens; the requested speed is the fill line).
+   - *Final answers:* "a_max caps acceleration" and "requested speed alters a value". **Correct, after substantial scaffolding. Status: accepted with help; revisit with a new example (a braking case) in M1-3's limit tests.**
 5. "To speed up it would have to increase prop speed and adjust the different props to angle itself to drive forward. Turning and direction is dictated by what prop is at what speed. This can be effected by Wind which i assume our model ignores unless we program it"
    - *Feedback:* Correct (props, tilt, wind). Added: tilt delay, drag, gravity, mass and motor limits. **Status: understood for the parts named.**
 6. Asked for the formulas again, then "x and y = 0?", then given the substituted lines: "0.3 and 0.4". **Correct, with help substituting values.**
@@ -122,6 +142,7 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
 ## 11. Evidence
 
 - Hand traces above, 2026-10-14.
+- `VehicleDynamicsTests.Step_FromRest_MatchesHandTrace` passes in the Unity Test Runner on my PC (session 6, 2026-10-14).
 
 ## 12. Reflection
 
@@ -129,11 +150,12 @@ Awaiting my answer.
 
 ## 13. References
 
-- Euler method (numerical integration): any introductory numerical methods text; to be added with the M1-3 code.
+- Euler method (numerical integration): any introductory numerical methods text.
+- NUnit `Assert.AreEqual(expected, actual, delta)`: the tolerance overload for `double`.
 
 ## 14. Date and milestone
 
-2026-10-14, Milestone 1 (M1-2, in progress).
+2026-10-14, Milestone 1 (M1-2 complete; first code in M1-3).
 
 ## What changed in my understanding?
 
