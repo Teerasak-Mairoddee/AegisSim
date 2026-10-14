@@ -25,5 +25,18 @@ namespace AegisSim.Tests.EditMode
             Assert.AreEqual(3, state.Velocity);
             Assert.AreEqual(0.6, state.Position, 1e-9);
         }
+
+        // Braking with a limit: 8 m/s asked for 5 m/s, a_max 10 m/s², dt 0.1 s.
+        [Test]
+        public void Step_Braking_IsLimitedByMaxAcceleration()
+        {
+            var state = new VehicleState(0, 8);
+
+            state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 1
+            Assert.AreEqual(7, state.Velocity, 1e-9);
+
+            state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 2
+            Assert.AreEqual(6, state.Velocity, 1e-9);
+        }
     }
 }
