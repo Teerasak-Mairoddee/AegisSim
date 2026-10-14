@@ -8,7 +8,7 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 |---|---|---|---|
 | 000 | [Project orientation](000-project-orientation.md) | M0 | Complete (gate passed 2026-10-14) |
 | 001 | [Unity simulation loop](001-unity-simulation-loop.md) | M1 | Complete |
-| 002 | [Vehicle dynamics](002-vehicle-dynamics.md) | M1 | In progress |
+| 002 | [Vehicle dynamics](002-vehicle-dynamics.md) | M1 | Complete |
 | 003 | Control and navigation | M2 | Not started |
 | 004 | Sensors and observations | M3 | Not started |
 | 005 | Computer vision | M4 | Not started |
@@ -20,6 +20,19 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 A note is created when its topic is introduced. When understanding improves, the note gains a dated "What changed in my understanding?" entry; earlier text is kept.
 
 ## Session log
+
+### 2026-10-14 (session 6): First Core code and test (M1-2 done, M1-3 started)
+
+- **What we built:** The first Core module, `Core/Simulation`: `VehicleState` (1D position and velocity) and `VehicleDynamics.Step` (bounded acceleration, semi-implicit Euler, input checks). Edit Mode test `Step_FromRest_MatchesHandTrace` checks Trace B steps 1 to 3. I created the files from Claude's code and wrote steps 2 and 3 of the test.
+- **What was covered** (my understanding is evidenced only where the answers show it): state vs `a_max` (asked again), operator order, what a unit test does, floating-point error and tolerances.
+- **Questions answered:** Lesson 002 question 4 asked again: state correct, `a_max` misconception repeated, then fixed with scaffolding ("a_max caps acceleration", "requested speed alters a value"). Predicted the test would pass, twice; it failed both times, for different reasons. Explained in my own words why a tolerance is not cheating. Details in [002](002-vehicle-dynamics.md).
+- **Mistakes and corrections:** Computed `10 + 10 × 0.1` as 2 (multiply first: 11). Left out the `Step` calls for steps 2 and 3, so the test checked step 1's state twice more. Suggested switching to `double` to fix rounding (already `double`; the fix is a tolerance).
+- **Tests and results:** Unity Test Runner, Edit Mode, on my PC: all green (placeholder test and `Step_FromRest_MatchesHandTrace`). Command-line run not repeated.
+- **Files changed:** `Core/Simulation/VehicleState.cs`, `Core/Simulation/VehicleDynamics.cs`, `Tests/EditMode/VehicleDynamicsTests.cs` (new); lesson 002, this journal, `docs/BACKLOG.md` (M1-2 ticked).
+- **Decisions:** Start in 1D with `double`, as a `readonly struct` plus a static step function: easy to trace by hand. `Step` throws on `dt <= 0` or negative `a_max`. Decimal checks use a `1e-9` tolerance.
+- **Blockers:** None.
+- **Next smallest task:** Add tests for the limits: holding at 5 m/s (Trace B steps 4 to 6), a braking case, and `dt <= 0` throwing. Then move to 3D vectors with a magnitude speed limit (rest of M1-3).
+- **Retrieval question for next session:** A drone moves at 8 m/s and is asked for 5 m/s, with `a_max = 10 m/s²` and `dt = 0.1 s`. What is its velocity after one step, and after two?
 
 ### 2026-10-14 (session 5): Lesson 002 model limits and 2D (M1)
 

@@ -14,7 +14,7 @@ The live backlog is [GitHub Issues](https://github.com/Teerasak-Mairoddee/AegisS
 ## Milestone 1: Unity arena and one vehicle
 
 - [x] **M1-1 Lesson 001: Unity simulation loop.** `Update` vs `FixedUpdate`, fixed timestep, why our integration lives in Core.
-- [ ] **M1-2 Lesson 002: Vehicle dynamics.** State variables; kinematic model with bounded acceleration; what it omits.
+- [x] **M1-2 Lesson 002: Vehicle dynamics.** State variables; kinematic model with bounded acceleration; what it omits.
 - [ ] **M1-3 Vehicle state and integrator in Core.** *Done when:* Edit Mode tests show acceleration and speed limits hold, and a hand-traced 3-step table matches the test.
 - [ ] **M1-4 Repeatability.** *Done when:* the same seed and inputs give identical trajectories over 1,000 steps (Edit Mode test).
 - [ ] **M1-5 Bounded arena.** *Done when:* a test shows the vehicle can't leave the arena and the violation is reported.
