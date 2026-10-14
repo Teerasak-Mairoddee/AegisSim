@@ -7,7 +7,7 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 | # | Topic | Milestone | Status |
 |---|---|---|---|
 | 000 | [Project orientation](000-project-orientation.md) | M0 | Complete (gate passed 2026-10-14) |
-| 001 | Unity simulation loop | M1 | Not started |
+| 001 | [Unity simulation loop](001-unity-simulation-loop.md) | M1 | Taught; reflection awaiting |
 | 002 | Vehicle dynamics | M1 | Not started |
 | 003 | Control and navigation | M2 | Not started |
 | 004 | Sensors and observations | M3 | Not started |
@@ -20,6 +20,19 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 A note is created when its topic is introduced. When understanding improves, the note gains a dated "What changed in my understanding?" entry; earlier text is kept.
 
 ## Session log
+
+### 2026-10-14 (session 4, continued): Lesson 001, the simulation loop (M1)
+
+- **What we built:** A throwaway `LoopCounter` experiment (not committed) and lesson note [001](001-unity-simulation-loop.md). I wrote the two counting lines.
+- **What was covered** (my understanding is evidenced only where the answers show it): `Update` vs `FixedUpdate`; fixed `dt`; real vs simulated time; `N = duration ÷ dt`; why the step will live in Core and be called from `FixedUpdate`.
+- **Questions answered:** Prediction (Update same, FixedUpdate halves at 30 FPS) was the wrong way round; measured 60/50 and 30/50. Explained the result correctly. "How can a test step 1 s?": first said it uses clock time (misconception, corrected). Step counting: needed help to get 50 for `dt` = 0.02, then answered 100 for `dt` = 0.01 correctly. Final explanation covered repeatability but not the test half. Details in [001](001-unity-simulation-loop.md).
+- **Mistakes and corrections:** Edited the wrong file at first (the new script was still the empty template); fixed. My PC hadn't pulled the session 3 and 4 merges; ran `git restore` on `QualitySettings.asset` and pulled.
+- **Tests and results:** None run (no committed code changed). Experiment result in lesson 001.
+- **Files changed:** `docs/learning/001-unity-simulation-loop.md` (new), this journal, `docs/BACKLOG.md` (M1-1 ticked).
+- **Decisions:** The simulation step will be `Step(dt)` in Core, called from a Runtime `FixedUpdate` with 0.02 s.
+- **Blockers:** None.
+- **Next smallest task:** Delete the `Experiments` folder in Unity, then lesson 002 (vehicle state: position, velocity, acceleration limits) and hand-trace three integration steps before writing the first Core test (M1-3).
+- **Retrieval question for next session:** A drone at position 0 m moves at 5 m/s. With `dt` = 0.02 s, where is it after 3 steps?
 
 ### 2026-10-14 (session 4): Milestone 0 gate passed (M0)
 
