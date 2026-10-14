@@ -81,7 +81,9 @@ Planned for M1-3 (not built yet): the step lives in **Core** as a plain method, 
 
 ## 12. Reflection
 
-Awaiting my answer.
+**2026-10-14, asked "what surprised you about Update and FixedUpdate?":** "Not surprising but more curious, why dont we use dt as standard rather than the option. What would benefit frame based updates?"
+
+*Follow-up:* `Update` suits per-frame work: reading input (a quick key tap can fall between fixed ticks), camera, UI and animation (smooth on high-refresh screens), and it avoids catch-up cost. Both loops use a dt; only `FixedUpdate`'s is constant. AegisSim: Runtime reads input and draws in `Update`; the Core step runs from `FixedUpdate` (M1-6).
 
 ## 13. References
 
