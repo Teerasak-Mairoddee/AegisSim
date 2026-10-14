@@ -7,8 +7,8 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 | # | Topic | Milestone | Status |
 |---|---|---|---|
 | 000 | [Project orientation](000-project-orientation.md) | M0 | Complete (gate passed 2026-10-14) |
-| 001 | [Unity simulation loop](001-unity-simulation-loop.md) | M1 | Taught; reflection awaiting |
-| 002 | Vehicle dynamics | M1 | Not started |
+| 001 | [Unity simulation loop](001-unity-simulation-loop.md) | M1 | Complete |
+| 002 | [Vehicle dynamics](002-vehicle-dynamics.md) | M1 | In progress |
 | 003 | Control and navigation | M2 | Not started |
 | 004 | Sensors and observations | M3 | Not started |
 | 005 | Computer vision | M4 | Not started |
@@ -20,6 +20,19 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 A note is created when its topic is introduced. When understanding improves, the note gains a dated "What changed in my understanding?" entry; earlier text is kept.
 
 ## Session log
+
+### 2026-10-14 (session 4, continued): Lesson 002 started, vehicle state (M1)
+
+- **What we built:** No code. Two hand-trace tables in lesson note [002](002-vehicle-dynamics.md).
+- **What was covered** (my understanding is evidenced only where the answers show it): state (position, velocity); units m, m/s, m/s²; the step rule with velocity first; acceleration capped at `a_max` and dropping to 0 at the requested speed.
+- **Questions answered:** Constant-velocity trace correct. Acceleration trace steps 2–3 correct unaided after help with units and step 1. Predicted the drone would reach 6 m/s at step 6 (misconception: kept accelerating past the requested speed), corrected with an explanation; not yet shown in my own answer.
+- **Mistakes and corrections:** Units mixed up several times (m vs m/s vs m/s²).
+- **Tests and results:** None (no code).
+- **Files changed:** `docs/learning/002-vehicle-dynamics.md` (new), this journal.
+- **Decisions:** Semi-implicit Euler (velocity first, then position) for the first model, to be tested in M1-3.
+- **Blockers:** None.
+- **Next smallest task:** Answer lesson 002 question 4, cover what the model leaves out, then plan M1-3 (first Core test from Trace B).
+- **Retrieval question for next session:** A drone is already moving at the 5 m/s Control asked for, with `a_max = 10 m/s²` and `dt = 0.1 s`. What is `a` this step, and why?
 
 ### 2026-10-14 (session 4, continued): Lesson 001, the simulation loop (M1)
 
