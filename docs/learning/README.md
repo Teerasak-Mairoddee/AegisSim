@@ -6,7 +6,7 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 
 | # | Topic | Milestone | Status |
 |---|---|---|---|
-| 000 | [Project orientation](000-project-orientation.md) | M0 | In progress |
+| 000 | [Project orientation](000-project-orientation.md) | M0 | Complete (gate passed 2026-10-14) |
 | 001 | Unity simulation loop | M1 | Not started |
 | 002 | Vehicle dynamics | M1 | Not started |
 | 003 | Control and navigation | M2 | Not started |
@@ -20,6 +20,19 @@ This journal records what Tee learned, in Tee's own words, with evidence. Claude
 A note is created when its topic is introduced. When understanding improves, the note gains a dated "What changed in my understanding?" entry; earlier text is kept.
 
 ## Session log
+
+### 2026-10-14 (session 4): Milestone 0 gate passed (M0)
+
+- **What we built:** No code. Closed the M0 learning gate and the orientation note. **Milestone 0 is complete.**
+- **What was covered** (my understanding is evidenced only where the answers below show it): Simulation as the world that applies physics and writes the true state; Control only sends commands; a collision is recorded by Simulation and counted as a failure by Evaluation.
+- **Questions answered:** Retrieval question (Control vs a wall): "Simulation" and "should simulate a crash", correct. Final gate answer: all five modules correct after I fixed a slip (wrote "Tracking" for coordination). Reflection recorded. Details in [000](000-project-orientation.md).
+- **Mistakes and corrections:** Last session's misconception (Control moves the drone) corrected. Slip: named Tracking twice; corrected to Coordination myself when asked.
+- **Tests and results:** None run (no code changed).
+- **Files changed:** Orientation note, this journal, `docs/BACKLOG.md` (M0-5, M0-6 ticked).
+- **Decisions:** None.
+- **Blockers:** None.
+- **Next smallest task:** M1 lesson 001: the Unity simulation loop (`Update` vs `FixedUpdate`, fixed timestep) and what a real test checks, compared with gameplay testing.
+- **Retrieval question for next session:** In one sentence, why is a collision in AegisSim recorded by Simulation but judged by Evaluation?
 
 ### 2026-10-14: Command-line tests and the M0 gate (M0)
 

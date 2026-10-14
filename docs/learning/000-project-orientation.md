@@ -116,6 +116,12 @@ Open RoverCore and find one place where a Unity type would have been convenient 
    - *Check question:* "Control sends 'fly north at 5 m/s'; a moment later the true position has moved 0.1 m. Which module moved it?" Answer: "Control was responsible"
    - *Feedback:* Misconception. Control only sends a command; Simulation applies it under physics (speed limits, walls) and writes the new true position. Control never writes truth (accelerator vs the car's engine and road).
    - **Status: not passed yet.** Perception, tracking, and control vs coordination shown. Simulation not yet understood; revisit with a new example at the start of the next session, before M1.
+   - *Revisit (2026-10-14, session 4), retrieval question "Control sends 'fly north at 5 m/s' towards a wall 0.05 m away; which module decides where the drone ends up, and what happens?":* "Simulation." Then: "The simulation will determine the physics and should simulate a crash"
+   - *Feedback:* Correct. Simulation applies the physics, stops the drone at the wall and records a collision event; Evaluation counts it as a failure.
+   - **Final gate answer (2026-10-14):** "Simulation is responsible for in world events like physics. Perception is responsible for how the drone will detect targets. Tracking calculates the targets positions and its movement for data. Control is how the drone will fly. Tracking is how the drones will communicate with eachother."
+   - *Correction, asked about the repeated "Tracking":* ""Tracking is how the drones will communicate with eachother." i meant coordination not tracking for this"
+   - *Feedback:* All five correct. Refinement: coordination is the drones deciding together who does what (which defender takes which target), not only communication; my earlier answer said this ("to make decisions on the target(s)"). Built properly in M8.
+   - **Status: gate passed (2026-10-14).** Simulation understood after the wall example; the control-moves-the-drone misconception is corrected. Revisit "who writes the true state" at M1 with the integrator.
 2. **First attempt (2026-10-14):** "We dont apply these to our simulated drones as they need to react to the environment rather than read the correct answer. The modules that help track and log the experiment to compare reults should be the only module that can read ground truth"
    - *Feedback:* The reason is right, and Evaluation is right. Checked the word "track": should the Tracking module read truth?
    - *Second attempt:* "If a module Tracking is used for the drone itself then no, it should rely on its own data which is what we are challenging. If it uses ground truth then its not tracking - it would be reading the answer, independent of the environment"
@@ -139,10 +145,13 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 - Assemblies and placeholder test committed by me: `cefbca8`.
 - Acceptance tests A2 and A6 passed on my PC, 2026-10-13 (see `docs/testing/test-strategy.md`).
 - Command-line Edit Mode run (M0-4) passed on my PC, 2026-10-14: exit code 0, 1 passed.
+- Learning gate passed, 2026-10-14 (section 10, question 1).
 
 ## 12. Reflection
 
-Awaiting my answer.
+**2026-10-14, asked "one thing you understand now that you didn't before, and one thing that still feels unclear?":** "I didnt know anything about tests and how to set it up. It is unclear tho what these tests are doing? I usually do gameplay testing which is very different to checking for ticks"
+
+*Follow-up:* fair, because the placeholder test checks nothing about the simulation. The first real test (M1) checks one exact claim about a vehicle's state, so we'll compare it directly with gameplay testing then.
 
 ## 13. References
 
