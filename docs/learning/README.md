@@ -21,6 +21,19 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-14 (session 5): Lesson 002 model limits and 2D (M1)
+
+- **What we built:** No code. Lesson note [002](002-vehicle-dynamics.md) now covers the model's limits and 2D vectors.
+- **What was covered** (my understanding is evidenced only where the answers show it): what a point-mass kinematic model ignores; per-axis position update; vector magnitude; why a speed cap must use the magnitude.
+- **Questions answered:** Retrieval (`a` at the requested speed) correct. Listed props, tilt and wind as ignored, correct. 2D step correct with help substituting. Diagonal-speed question correct unaided. "What is the state, and what stops speed growing?": mixed up step vs state and `a_max` vs top speed; to be asked again.
+- **Mistakes and corrections:** See the last question above.
+- **Tests and results:** None (no code).
+- **Files changed:** `docs/learning/002-vehicle-dynamics.md`, this journal.
+- **Decisions:** Speed limits cap the velocity's magnitude, not each axis.
+- **Blockers:** None.
+- **Next smallest task:** Answer lesson 002 question 4 fresh, then M1-3: create `Core/Simulation`, a `VehicleState` and `Step(dt)`, and the first real Edit Mode test from Trace B.
+- **Retrieval question for next session:** In our model, what is the drone's state, and which rule stops its speed from growing forever?
+
 ### 2026-10-14 (session 4, continued): Lesson 002 started, vehicle state (M1)
 
 - **What we built:** No code. Two hand-trace tables in lesson note [002](002-vehicle-dynamics.md).
