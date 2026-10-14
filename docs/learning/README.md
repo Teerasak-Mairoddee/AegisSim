@@ -21,6 +21,19 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-14: Command-line tests and the M0 gate (M0)
+
+- **What we built:** No new code. Ran the Edit Mode tests from PowerShell in batch mode (M0-4) and recorded the verified command in `CLAUDE.md`.
+- **What was covered** (my understanding is evidenced only where the answers below show it): why tests are run by a command and not only by clicking; what each batch-mode flag does; exit codes (0 passed, 2 a test failed, 1 tests did not run); that batch mode can't open a project already open in the editor; ground truth vs belief.
+- **Questions answered:** Retrieval question (PlayMode vs `UnityEditor.TestRunner`): first said it is because Play Mode tests run during a live playtest (partly right), then thought `UnityEditor` could be read after a build (misconception: builds strip it). Restated correctly: "If the playmode assembly tries to read from the UnityEditor test runner it would fail becuase a built game excludes the editor". Exit-code check (`Assert.IsTrue(false)` gives which code?): "2", correct. Q2 (who may read ground truth): understood on the second attempt. Learning gate (Q1): perception, tracking, and control vs coordination shown; Simulation not yet (said Control moves the drone). Details in [000](000-project-orientation.md).
+- **Mistakes and corrections:** First batch-mode run returned 1 with no results file; the log stopped right after opening the project and `Temp/UnityLockfile` was present. After closing Unity, the run returned 0.
+- **Tests and results:** Edit Mode, command line: 1 passed, 0 failed, exit code 0. See [test strategy](../testing/test-strategy.md).
+- **Files changed:** `CLAUDE.md` (verified command), `docs/testing/test-strategy.md`, `docs/BACKLOG.md` (M0-4 ticked), orientation note, this journal, `ProjectSettings/QualitySettings.asset` (Unity's own format upgrade).
+- **Decisions:** Use `Start-Process -Wait -PassThru` so PowerShell waits for Unity and can read its exit code. The gate stays open until the Simulation part is shown.
+- **Blockers:** None.
+- **Next smallest task:** Revisit Simulation with a new example and close the M0 gate (#6) and orientation note (#5), then start M1 lesson 001.
+- **Retrieval question for next session:** A defender's Control sends "fly north at 5 m/s" towards a wall 0.05 m away. Which module decides where the drone actually ends up, and what happens?
+
 ### 2026-10-13: Unity project and first test (M0)
 
 - **What we built:** Cloned the repo to my PC, created the Unity 6000.6.5f1 URP project in `unity/AegisSim/`, and created the four assemblies (`AegisSim.Core` with No Engine References, `AegisSim.Runtime`, `AegisSim.Tests.EditMode`, `AegisSim.Tests.PlayMode`) with a placeholder Edit Mode test. My first commits: `6b6568e`, `cefbca8`.

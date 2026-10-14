@@ -107,8 +107,19 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 
 ### Comprehension questions
 
-1. Awaiting my answer.
-2. Awaiting my answer.
+1. **Learning gate, first attempt (2026-10-14):** "Simulation is what we are building, a calculated response to what could happen. Perception would be how the drone sees and detects targets, tracking is involves confirming the target and calculating its position and movements. control and coordination is how the drone will operate using all this data"
+   - *Feedback:* Perception and tracking correct, in the right order. Two gaps: Simulation described as the whole project rather than one module; control and coordination merged.
+   - *Second attempt, on those two gaps:* "1. It evaluates the accuracy of the decisions? 2. Control is responsible for the flight of the drone, Coordination is how multiple drones communicate to each other to make decisions on the target(s)"
+   - *Feedback:* Control vs coordination correct (one drone vs several). The Simulation answer describes Evaluation instead. Simulation is the world: it holds the true state and moves everything forward each step using the physics rules.
+   - *Third attempt:* "simulation determines the physics rules and how the drones will operate in mission"
+   - *Feedback:* "Physics rules" is right; "how the drones will operate" belongs to Control.
+   - *Check question:* "Control sends 'fly north at 5 m/s'; a moment later the true position has moved 0.1 m. Which module moved it?" Answer: "Control was responsible"
+   - *Feedback:* Misconception. Control only sends a command; Simulation applies it under physics (speed limits, walls) and writes the new true position. Control never writes truth (accelerator vs the car's engine and road).
+   - **Status: not passed yet.** Perception, tracking, and control vs coordination shown. Simulation not yet understood; revisit with a new example at the start of the next session, before M1.
+2. **First attempt (2026-10-14):** "We dont apply these to our simulated drones as they need to react to the environment rather than read the correct answer. The modules that help track and log the experiment to compare reults should be the only module that can read ground truth"
+   - *Feedback:* The reason is right, and Evaluation is right. Checked the word "track": should the Tracking module read truth?
+   - *Second attempt:* "If a module Tracking is used for the drone itself then no, it should rely on its own data which is what we are challenging. If it uses ground truth then its not tracking - it would be reading the answer, independent of the environment"
+   - *Feedback:* Correct: with truth, Tracking's error would always be zero and Evaluation would measure nothing. Missing piece added: Simulation also reads truth, because it creates and owns it. **Status: understood (shown by answer, second attempt).**
 3. **First attempt (2026-10-13):** ".meta may include dependencies to build the libraries"
    - *Feedback:* Partly right. `Library/` is indeed rebuilt from what's committed, so it never needs to be in Git. The missing piece: each `.meta` file holds the asset's **GUID** (its permanent ID) and its import settings. Scenes and prefabs refer to assets by GUID, not by file name, so a missing `.meta` makes Unity generate a new GUID on the next machine and every reference to that asset breaks.
    - *Second attempt (2026-10-13), answering "a material's `.meta` is missing; what does a teammate see?":* "they see missing references / no assets/asset names"
@@ -127,6 +138,7 @@ Open RoverCore and find one place where a Unity type would have been convenient 
 - Unity project committed by me: `6b6568e` (branch `m0-unity-setup`).
 - Assemblies and placeholder test committed by me: `cefbca8`.
 - Acceptance tests A2 and A6 passed on my PC, 2026-10-13 (see `docs/testing/test-strategy.md`).
+- Command-line Edit Mode run (M0-4) passed on my PC, 2026-10-14: exit code 0, 1 passed.
 
 ## 12. Reflection
 
