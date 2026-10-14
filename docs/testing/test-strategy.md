@@ -24,7 +24,7 @@ Tests are added with each feature, not afterwards. Every test states **what it p
 ## How to run
 
 - **Unity:** Window > General > Test Runner, then the Edit Mode or Play Mode tab, then Run All.
-- **Command line:** to be verified during M0 acceptance test A6.
+- **Command line:** see the PowerShell command in `CLAUDE.md` (Commands). Verified on Tee's PC on 2026-10-14. Exit code 0 = passed, 2 = a test failed, 1 = tests did not run.
 
 ## Results log
 
@@ -32,9 +32,10 @@ Tests are added with each feature, not afterwards. Every test states **what it p
 |---|---|---|---|---|---|
 | 2026-10-13 | M0 | Edit Mode (`PlaceholderTests`), run manually in Test Runner on Tee's PC | 1 | 0 | A6: proves the test assembly compiles and is discovered; proves nothing about simulation behaviour |
 | 2026-10-13 | M0 | Repo hygiene (A2): `git status` after opening Unity | pass | – | Only `.vsconfig`, `Assets`, `Packages`, `ProjectSettings` tracked; `Library`, `Temp`, `Logs`, `UserSettings` ignored |
+| 2026-10-14 | M0 | Edit Mode, command line (M0-4), batch mode on Tee's PC | 1 | 0 | Exit code 0; `editmode.xml` shows `PlaceholderTests.TestPipeline_IsWired` passed. First attempt exited 1, most likely because the editor still had the project open (`Temp/UnityLockfile` present; passed once Unity was closed) |
 
 ## Known limitations
 
 - Only a placeholder test exists (M0). No simulation logic is tested yet.
-- The command-line test run (M0-4) has not been verified.
+- The command-line run is manual. Nothing runs tests automatically on push yet.
 - No Play Mode test exists yet; the Play Mode assembly is untested wiring.

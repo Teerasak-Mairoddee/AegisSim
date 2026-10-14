@@ -24,7 +24,18 @@ Guidance for Claude Code working in this repository.
 ## Commands
 
 - Unity tests: Unity Test Runner (Window > General > Test Runner), Edit Mode and Play Mode tabs.
-- Command-line tests (to be verified on Tee's machine during M0 A6): `Unity.exe -batchmode -projectPath unity/AegisSim -runTests -testPlatform EditMode -testResults TestResults/editmode.xml`
+- Command-line tests (verified on Tee's PC, 2026-10-14). Close the Unity editor first: batch mode exits with code 1 if the project is open elsewhere (`Temp/UnityLockfile` exists). From the repo root in PowerShell:
+
+  ```powershell
+  New-Item -ItemType Directory -Force TestResults
+  $p = Start-Process -FilePath "C:\Program Files\Unity\Hub\Editor\6000.6.5f1\Editor\Unity.exe" `
+    -ArgumentList '-batchmode','-projectPath',"$PWD\unity\AegisSim",'-runTests','-testPlatform','EditMode',
+    '-testResults',"$PWD\TestResults\editmode.xml",'-logFile',"$PWD\TestResults\editmode.log" `
+    -Wait -PassThru -NoNewWindow
+  $p.ExitCode
+  ```
+
+  Exit code 0 = all tests passed, 2 = tests ran and at least one failed, 1 = tests did not run (read `TestResults/editmode.log`). `TestResults/` is git-ignored.
 
 ## Operating instructions (copied from the project plan, section 16)
 
