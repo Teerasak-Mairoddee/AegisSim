@@ -42,6 +42,16 @@ namespace AegisSim.Tests.EditMode
             Assert.AreEqual(-0.2, scaled.Z, 1e-9);
         }
 
+        [Test]
+        public void DivideByNumber_DividesEachAxis()
+        {
+            var divided = new Vec3(3, 0, -1) / 0.1;
+
+            Assert.AreEqual(30, divided.X, 1e-9);
+            Assert.AreEqual(0, divided.Y, 1e-9);
+            Assert.AreEqual(-10, divided.Z, 1e-9);
+        }
+
         // Too long: (6, 8, 0) has length 10, capped at 5, so every part is halved.
         [Test]
         public void ClampMagnitude_TooLong_ShrinksKeepingDirection()

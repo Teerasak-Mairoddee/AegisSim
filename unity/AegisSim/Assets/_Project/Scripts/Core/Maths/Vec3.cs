@@ -46,6 +46,7 @@ namespace AegisSim.Maths
         public static Vec3 operator +(Vec3 a, Vec3 b) => new Vec3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         public static Vec3 operator -(Vec3 a, Vec3 b) => new Vec3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         public static Vec3 operator *(Vec3 v, double s) => new Vec3(v.X * s, v.Y * s, v.Z * s);
+        public static Vec3 operator /(Vec3 v, double s) => new Vec3(v.X / s, v.Y / s, v.Z / s);
 
         public override string ToString() => $"({X}, {Y}, {Z})";
     }
