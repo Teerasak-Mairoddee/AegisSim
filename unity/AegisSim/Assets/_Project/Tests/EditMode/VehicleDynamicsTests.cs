@@ -1,5 +1,6 @@
-using NUnit.Framework;
 using AegisSim.Simulation;
+using NUnit.Framework;
+using System;
 
 namespace AegisSim.Tests.EditMode
 {
@@ -57,6 +58,16 @@ namespace AegisSim.Tests.EditMode
             state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 3
             Assert.AreEqual(5, state.Velocity, 1e-9);
             Assert.AreEqual(3, state.Position, 1e-9);
+        }
+
+        // Bad input: Step must refuse a zero or negative dt.
+        [Test]
+        public void Step_ZeroOrNegativeDt_Throws()
+        {
+            var state = new VehicleState(0, 0);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => VehicleDynamics.Step(state, 5, 10, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => VehicleDynamics.Step(state, 5, 10, -0.1));
         }
     }
 }
