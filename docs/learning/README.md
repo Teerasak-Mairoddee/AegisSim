@@ -21,6 +21,27 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-15 (session 7): Limits, `Vec3` and 3D (M1-3 complete)
+
+- **What we built:** Tests for braking, holding speed and a bad `dt`. A new shared folder `Core/Maths` with `Vec3` (I wrote `Magnitude` and the body of `ClampMagnitude`, test-first). `VehicleState` and `Step` switched to 3D; `Step` now caps the request at a top speed, then caps acceleration by magnitude. I wrote the hold, bad-dt and top-speed tests and converted three tests to 3D. **M1-3 is done.**
+- **What was covered** (my understanding is evidenced only where the answers show it): failing fast vs quiet defaults; `Assert.Throws` and what makes it pass; one test class per class; why shared maths sits outside `Simulation` (ground truth stays private); test-first (red for the right reason, then green); refactoring under tests; magnitude and `ClampMagnitude`; "Control asks, Simulation decides" for the top speed.
+- **Questions answered:** Chose throwing over a default dt, with a correct reason. Predicted the bad-dt test red (was green) and, with the guard removed, green (was red); then explained it correctly as a question. Explained why `Magnitude` tests were red before the fix. Explained what the refactor's green tests proved (first half). Details in [002](002-vehicle-dynamics.md) section 8.
+- **Mistakes and corrections:** Said velocity 0 when `a` was 0. Thought dt=0 multiplies everything to 0 (it divides first). Put the dt test in its own file (moved). Gave lengths where vectors were asked ((6, 8, 0) → "5", velocity → "10m/s"). Forgot ÷ dt when working out `a` (the same slip as the practice sheet). Forgot calculator brackets for √. First top-speed test expected 10 on every axis.
+- **Tests and results:** Unity Test Runner, Edit Mode, on my PC: 13 passed, 0 failed. Command-line run not repeated.
+- **Files changed:** `Core/Maths/Vec3.cs` (new), `Core/Simulation/VehicleState.cs`, `Core/Simulation/VehicleDynamics.cs`, `Tests/EditMode/VehicleDynamicsTests.cs`, `Tests/EditMode/Vec3Tests.cs` (new); lesson 002, this journal, `docs/BACKLOG.md` (M1-3 ticked), `docs/architecture/overview.md` (Maths folder), `docs/testing/test-strategy.md`; formula sheet (magnitude) in the project files.
+- **Decisions:** Own `Vec3` of `double` instead of Unity's `Vector3` or `System.Numerics.Vector3` (float). `Maths` is a shared folder that depends on nothing. `Step` throws on bad input rather than substituting defaults. The top speed is enforced inside Simulation by capping the request. Known weakness: `maxSpeed` and `maxAcceleration` can be swapped silently; a `VehicleLimits` struct may fix it later.
+- **Blockers:** None.
+- **Next smallest task:** M1-4 repeatability: the same seed and inputs give identical trajectories over 1,000 steps (Edit Mode test). Starts with a short lesson on what a seed is.
+- **Retrieval question for next session:** A drone's velocity is (0, 6, 8) m/s and its top speed is 5 m/s. What velocity does `ClampMagnitude` give, and which way is it now moving in Unity?
+
+### 2026-10-15 (practice, at work): M1 practice sheet 01
+
+- **What we built:** No code. Worked through [the practice sheet](https://claude.ai/artifact/F698Yp1exTUqhE4bRZAAvL) on my phone, and asked for a formula sheet, now kept in the project files and updated as we go.
+- **What was covered:** steps from duration (`N = duration ÷ dt`), the Euler step, `a × dt` as the change in velocity per step, braking with a negative `a`, steps to reach a speed, 3D speed and caps (preview).
+- **Questions answered:** `N = duration ÷ dt` correct. Spotted myself that `((requested − v) ÷ dt) × dt` is just the gap, so the change per step is the gap, but no bigger than `a_max × dt`. Asked what happens when `a` is under `a_max` (it's used as is).
+- **Mistakes and corrections:** Used dt as the speed change per step several times (0.1 instead of `a × dt` = 0.2). Called 25 steps "25 seconds". Fixed with hints each time; the dt slip came back in session 7.
+- **Tests and results:** None (no code).
+
 ### 2026-10-14 (session 6): First Core code and test (M1-2 done, M1-3 started)
 
 - **What we built:** The first Core module, `Core/Simulation`: `VehicleState` (1D position and velocity) and `VehicleDynamics.Step` (bounded acceleration, semi-implicit Euler, input checks). Edit Mode test `Step_FromRest_MatchesHandTrace` checks Trace B steps 1 to 3. I created the files from Claude's code and wrote steps 2 and 3 of the test.

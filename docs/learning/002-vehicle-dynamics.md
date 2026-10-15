@@ -44,7 +44,16 @@ Built in session 6 (M1-3, 1D only), in `Core/Simulation` (namespace `AegisSim.Si
 
 Test: `Tests/EditMode/VehicleDynamicsTests.cs`, `Step_FromRest_MatchesHandTrace`, checks steps 1 to 3 of Trace B. I filled in steps 2 and 3.
 
-Still to do in M1-3: 3D vectors with a magnitude speed limit, and tests for the limits.
+**Session 7 (2026-10-15): limits and 3D (M1-3 complete).**
+
+- `Core/Maths/Vec3.cs` (namespace `AegisSim.Maths`, new shared folder): a `readonly struct` with `X`, `Y`, `Z` as `double`, `+`, `-`, `* number`, `/ number`, `Magnitude` (I wrote it) and `ClampMagnitude(maxLength)` (I wrote the body). Not Unity's `Vector3`: Core has No Engine References, and `Vector3` uses `float`. It lives outside `Simulation` so other modules can use vectors without reaching into the module that owns ground truth.
+- `VehicleState` now holds a `Vec3 Position` and `Vec3 Velocity`.
+- `Step(state, requestedVelocity, maxSpeed, maxAcceleration, dt)`:
+  1. `allowedVelocity = requestedVelocity.ClampMagnitude(maxSpeed)`: Control only asks; Simulation enforces the top speed.
+  2. `neededAcceleration = (allowedVelocity − v) ÷ dt`, then `ClampMagnitude(maxAcceleration)`: the 3D version of clamping between −a_max and +a_max (keep the direction, limit the length).
+  3. Velocity then position, as before. Throws on `dt <= 0`, or a negative `maxSpeed` or `maxAcceleration`.
+- Tests: `VehicleDynamicsTests` (hand trace, braking, holding, bad dt, top speed) and `Vec3Tests`. The 1D tests were rewritten to fly along x with the same expected numbers, which is how the refactor was shown not to change behaviour.
+- Known weakness: `maxSpeed` and `maxAcceleration` are two plain numbers side by side and could be swapped without a compiler error. Candidate fix later: a small `VehicleLimits` struct.
 
 ## 6. Alternatives and trade-offs
 
@@ -106,6 +115,20 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
 - *Comprehension check, "isn't adding `1e-9` cheating?":* "I would say the margin was minimal and its just a nuance of the mathematics. It does not change the result of what happens it just closes the miscommunication between the tested values and the answer."
   - *Feedback:* Correct. Added: the test still catches real bugs, because a real mistake (for example 0.1 m out) is millions of times bigger than the 1e-9 gap. **Status: understood (own words).**
 
+**Code checks (session 7, 2026-10-15, M1-3):**
+
+- *Hold speed:* started at 1.5 m and 5 m/s, requested 5 m/s. Positions "2.0m, 2.5m and 3.0m" correct; first said velocity 0 ("within size of a_max"), then "5m/s for all". Correction: `a` is 0 because the gap is 0; `a_max` plays no part. I wrote the whole test myself, correct first time.
+- *Bad dt, design:* first suggested "a default value of dt if dt=0" and thought dt=0 makes everything 0 (it divides in the first line). Claude showed `double` gives `Infinity`, so the drone silently freezes. Asked A (quiet default) or B (throw): "option B since we might not notice a quiet swap during test." **Correct.**
+- *Bad dt, test:* wrote it with `Assert.Throws` in a separate file and class; predicted red, result green. Why green: "Assert checks if it fails which resulted in a positive failure". Experiment, guard commented out: predicted green, result red (`But was: null`). After explanation (only the `throw` line creates an error): "so Assert.Throws only works if throw new ArgumentOutOfRangeException(...) tells it that its an error?" **Correct.**
+- *Where tests go:* "it would be hard to keep track of all the tests relating to VehicleDynamics if they are separated amongst other test categories". Moved into `VehicleDynamicsTests`. Convention: one test class per class, methods `Method_Situation_ExpectedResult`.
+- *Where `Vec3` goes:* proposed "another read only struct like VehicleState but provide 3 parameters" (the chosen design). On putting it in `Simulation`: "we would have too many references for the same vec3 value across different modules" (partly: one shared definition, yes; the main reason, not exposing ground truth to other modules, was explained by Claude).
+- *Magnitude, test-first:* (3, 4, 0) → 5 correct. Predicted all four `Vec3` tests green; the two magnitude tests were red (`NotImplementedException`). Why: "magnitude was not implemented and instead threw an error". Wrote `Math.Sqrt(X * X + Y * Y + Z * Z)`; green.
+- *ClampMagnitude:* (6, 8, 0) capped at 5: said "5" (the length), then "3,4,0". **Correct.** Wrote the method body from the step comments; 11 green.
+- *3D acceleration cap:* "I am unsure, convert them all to magnitudes?" (would lose direction). Claude gave `ClampMagnitude(maxAcceleration)`.
+- *Refactor:* converted three tests to `Vec3` myself; predicted all green, 12 green. What it proves: "we validated that 1d tests work with refactoring it after we can prove that the results are repeatable with the same 1D elements in a 3D structure". Correct for behaviour preserved; Claude added why doing it without tests would have been risky.
+- *Top speed:* request (30, 0, 40), top speed 10, a_max 100, dt 0.1. Speed asked: "1600" (forgot brackets), then "50". Capped request "6,0,8". `a`: "10" (forgot ÷ dt, the same dt slip as the practice sheet), then "100". Velocity "10m/s" (the speed; as a vector (6, 0, 8)). First test version expected 10 on every axis; fixed to (6, 0, 8) plus magnitude 10. Predicted green; 13 green.
+- *Why cap the request in Simulation?* Awaiting my answer.
+
 ## 9. Comprehension questions
 
 1. Trace A: positions after steps 1–3.
@@ -143,6 +166,7 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
 
 - Hand traces above, 2026-10-14.
 - `VehicleDynamicsTests.Step_FromRest_MatchesHandTrace` passes in the Unity Test Runner on my PC (session 6, 2026-10-14).
+- 13 Edit Mode tests pass in the Unity Test Runner on my PC (session 7, 2026-10-15): all 1D limits, `Vec3`, and the 3D top-speed cap.
 
 ## 12. Reflection
 
@@ -155,7 +179,7 @@ Awaiting my answer.
 
 ## 14. Date and milestone
 
-2026-10-14, Milestone 1 (M1-2 complete; first code in M1-3).
+2026-10-14, Milestone 1 (M1-2 complete; first code in M1-3). M1-3 completed 2026-10-15 (session 7).
 
 ## What changed in my understanding?
 

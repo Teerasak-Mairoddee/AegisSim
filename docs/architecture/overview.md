@@ -40,8 +40,12 @@ Arrows point from the code that uses to the code it uses. Core depends on nothin
 
 ## Module boundaries (planned folders inside Core)
 
+`Maths` is the one shared folder: modules depend on it, it depends on nothing. It lives outside `Simulation` so that Tracking, Control and the rest can use vectors without a `using AegisSim.Simulation;` line, which would also expose ground truth (session 7, 2026-10-15).
+
+
 | Module | Owns | Must not |
 |---|---|---|
+| Maths (shared, M1-3) | `Vec3` and other plain maths types used by every module | Depend on any other module, or hold simulation state |
 | Simulation | Vehicle state, integration, arena, seeds, time | Know about perception or scoring |
 | Sensors | Turning truth into observations | Pass truth through unchanged |
 | Perception | Detections and class confidence | Read truth |

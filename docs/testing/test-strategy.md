@@ -33,9 +33,10 @@ Tests are added with each feature, not afterwards. Every test states **what it p
 | 2026-10-13 | M0 | Edit Mode (`PlaceholderTests`), run manually in Test Runner on Tee's PC | 1 | 0 | A6: proves the test assembly compiles and is discovered; proves nothing about simulation behaviour |
 | 2026-10-13 | M0 | Repo hygiene (A2): `git status` after opening Unity | pass | – | Only `.vsconfig`, `Assets`, `Packages`, `ProjectSettings` tracked; `Library`, `Temp`, `Logs`, `UserSettings` ignored |
 | 2026-10-14 | M0 | Edit Mode, command line (M0-4), batch mode on Tee's PC | 1 | 0 | Exit code 0; `editmode.xml` shows `PlaceholderTests.TestPipeline_IsWired` passed. First attempt exited 1, most likely because the editor still had the project open (`Temp/UnityLockfile` present; passed once Unity was closed) |
+| 2026-10-15 | M1 | Edit Mode, run manually in Test Runner on Tee's PC (M1-3) | 13 | 0 | `VehicleDynamicsTests` (hand trace, braking, holding, bad dt, top speed) and `Vec3Tests` (magnitude, operators, `ClampMagnitude`), plus the placeholder. Command-line run not repeated this session |
 
 ## Known limitations
 
-- Only a placeholder test exists (M0). No simulation logic is tested yet.
+- Simulation tests so far fly mostly along one axis; only the top-speed test is diagonal. No arena, repeatability or multi-vehicle tests yet (M1-4 onward).
 - The command-line run is manual. Nothing runs tests automatically on push yet.
 - No Play Mode test exists yet; the Play Mode assembly is untested wiring.
