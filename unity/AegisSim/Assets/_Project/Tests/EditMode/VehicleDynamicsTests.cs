@@ -38,5 +38,25 @@ namespace AegisSim.Tests.EditMode
             state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 2
             Assert.AreEqual(6, state.Velocity, 1e-9);
         }
+
+        // Holding speed: already at the requested 5 m/s (Trace B, steps 6 to 8).
+        [Test]
+        public void Step_AtRequestedSpeed_HoldsSpeed()
+        {
+            
+            var state = new VehicleState(1.5, 5);
+
+            state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 1
+            Assert.AreEqual(5, state.Velocity, 1e-9);
+            Assert.AreEqual(2, state.Position, 1e-9);
+
+            state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 2
+            Assert.AreEqual(5, state.Velocity, 1e-9);
+            Assert.AreEqual(2.5, state.Position, 1e-9);
+
+            state = VehicleDynamics.Step(state, 5, 10, 0.1);   // step 3
+            Assert.AreEqual(5, state.Velocity, 1e-9);
+            Assert.AreEqual(3, state.Position, 1e-9);
+        }
     }
 }
