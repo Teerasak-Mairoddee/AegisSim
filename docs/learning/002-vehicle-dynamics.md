@@ -127,7 +127,8 @@ Steps 1–3 are mine; steps 4–6 were filled in by Claude after question 3.
 - *3D acceleration cap:* "I am unsure, convert them all to magnitudes?" (would lose direction). Claude gave `ClampMagnitude(maxAcceleration)`.
 - *Refactor:* converted three tests to `Vec3` myself; predicted all green, 12 green. What it proves: "we validated that 1d tests work with refactoring it after we can prove that the results are repeatable with the same 1D elements in a 3D structure". Correct for behaviour preserved; Claude added why doing it without tests would have been risky.
 - *Top speed:* request (30, 0, 40), top speed 10, a_max 100, dt 0.1. Speed asked: "1600" (forgot brackets), then "50". Capped request "6,0,8". `a`: "10" (forgot ÷ dt, the same dt slip as the practice sheet), then "100". Velocity "10m/s" (the speed; as a vector (6, 0, 8)). First test version expected 10 on every axis; fixed to (6, 0, 8) plus magnitude 10. Predicted green; 13 green.
-- *Why cap the request in Simulation?* Awaiting my answer.
+- *Why cap the request in Simulation?* "because the drone will have limits. and human error may occur which will alter results. Control may ask and want a high speed but it must be bound to its limits. capping the steps will simulate this."
+  - *Feedback:* Correct. Added: the limit belongs to the vehicle, so Simulation enforces it whoever is asking. A buggy Control, or later a trained ML policy, can't get a physically impossible speed, so results stay honest. **Status: understood (own words).**
 
 ## 9. Comprehension questions
 
