@@ -9,14 +9,19 @@ namespace AegisSim.Simulation
     /// </summary>
     public static class VehicleDynamics
     {
-        public static VehicleState Step(VehicleState state, Vec3 requestedVelocity, double maxAcceleration, double dt)
+        public static VehicleState Step(VehicleState state, Vec3 requestedVelocity, double maxSpeed, double maxAcceleration, double dt)
         {
             if (dt <= 0)
                 throw new ArgumentOutOfRangeException(nameof(dt), dt, "dt must be greater than 0.");
+            if (maxSpeed < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxSpeed), maxSpeed, "maxSpeed cannot be negative.");
             if (maxAcceleration < 0)
                 throw new ArgumentOutOfRangeException(nameof(maxAcceleration), maxAcceleration, "maxAcceleration cannot be negative.");
 
-            Vec3 neededAcceleration = (requestedVelocity - state.Velocity) / dt;   // close the gap in one step
+            // Control only asks; Simulation enforces the vehicle's top speed.
+            Vec3 allowedVelocity = requestedVelocity.ClampMagnitude(maxSpeed);
+
+            Vec3 neededAcceleration = (allowedVelocity - state.Velocity) / dt;   // close the gap in one step
             Vec3 acceleration = neededAcceleration.ClampMagnitude(maxAcceleration);   // cap the arrow's length at a_max
 
             Vec3 newVelocity = state.Velocity + acceleration * dt;
