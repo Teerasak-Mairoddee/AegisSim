@@ -21,6 +21,15 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-16/17 (practice, chat): Sheet 02 Q8 and stopping from top speed
+
+- **What we built:** No code. Worked sheet 02 Q8 (a braking clamp) and a new question in chat: a drone at (20, 0, 0) m/s, top speed 20 m/s, a_max 10 m/s², dt 0.1 s, Control asks for (0, 0, 0). How many steps to stop?
+- **What was covered:** `ClampMagnitude` gives a scale factor (limit ÷ magnitude) that multiplies every part of the vector; a value exactly at the limit passes unchanged (`length <= maxLength`); reaching top speed means cruising, not stopping; the request is clamped before acceleration.
+- **Questions answered:** On Q8 step 3: "its -10 which is within a_max so no change", with ÷ dt done unprompted. On the stopping question I worked the whole chain myself: needed a = −200 m/s², "-200 is over a_max so it becomes -10ms2", v after one step (19, 0, 0), and 20 steps to stop.
+- **Mistakes and corrections:** On Q8 step 1 I treated the scale factor (0.333) as the answer instead of multiplying by it, and said v was over the limit when it was a. Asked whether "allowed" was always 20 m/s (it is the request after the top-speed cap, so here (0, 0, 0)).
+- **Evidence:** On the stopping question I did not make either of the slips recorded in session 7: I divided by dt and gave velocities as vectors.
+- **Tests and results:** None (no code).
+
 ### 2026-10-15 (session 7): Limits, `Vec3` and 3D (M1-3 complete)
 
 - **What we built:** Tests for braking, holding speed and a bad `dt`. A new shared folder `Core/Maths` with `Vec3` (I wrote `Magnitude` and the body of `ClampMagnitude`, test-first). `VehicleState` and `Step` switched to 3D; `Step` now caps the request at a top speed, then caps acceleration by magnitude. I wrote the hold, bad-dt and top-speed tests and converted three tests to 3D. **M1-3 is done.**
