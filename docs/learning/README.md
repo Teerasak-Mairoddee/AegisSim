@@ -21,6 +21,24 @@ A note is created when its topic is introduced. When understanding improves, the
 
 ## Session log
 
+### 2026-10-20 (session 8): Seeds and repeatability (M1-4 started)
+
+- **What we built:** Synced my PC to `main` (fast-forward to PR #31) and started branch `m1-repeatability`. Agreed the M1-4 plan and created `Tests/EditMode/RepeatabilityTests.cs` from an outline. I wrote `NextInRange`: `return min + (max - min) * rng.NextDouble();`. `RunTrajectory` and both tests are still TODOs. Claude added a `throw new NotImplementedException(...)` placeholder and `[Ignore("M1-4 in progress")]` so the file compiles and the empty tests can't show a false green.
+- **What was covered** (understanding evidenced only where the answers show it): what repeatable means; a seed fixes a pseudo-random sequence; regression tests; tolerance vs exact equality; why compare every step; why not rely on built-in struct equality.
+- **Questions answered:**
+  - Retrieval (session 7): speed of (0, 6, 8) is 10, over 5, so it is clamped. On the second try I gave the vector **(0, 3, 4) m/s**, then "up and forward".
+  - Q1 (green or red?): "It will return green but im not sure why it is worth keeping. Maybe use it as a control reult for a working test." With an unseeded wind example: "The results will change due to its random values. We are unable to repeat the results unless we get the same modifier." Claude filled in: the test turns red, so it works as a regression test.
+  - Q2 (tolerance or exact?): "Exact for accuracy". Asked why rounding noise won't make runs differ: "unsure". Claude explained that rounding is deterministic, so identical runs give identical bits.
+  - Q3 (why every step?): "because the adjustment in the random could effect the entire result from anywhere else not just the last". Claude added: paths can re-converge (both brake to rest), and the step number tells you where to look.
+  - Q4 (own comparison or built-in `Equals`?): "Ideally, using built in will reduce our workload, but we could compare the numbers ourselves as a double check." Claude explained that the built-in behaviour is unverified (bits vs value, `0.0` vs `-0.0`) and its message has no step number, so we compare the six numbers ourselves.
+- **Mistakes and corrections:** First warm-up answer gave a length ("5 m/s") where a vector was asked, and put forward on x instead of z. Both were corrected on the second try. Q2's reason and Q4 needed explanation, so they don't yet count as evidence of understanding.
+- **Tests and results:** Not run tonight. The placeholder edit has not been compiled; check the Unity console for errors first next session.
+- **Files changed:** `Tests/EditMode/RepeatabilityTests.cs` (+ `.meta`, new, on my PC, uncommitted at the time of writing); this journal.
+- **Decisions:** Separate `RepeatabilityTests` file (tests a property of a whole run). Exact `==` on all six numbers at every step, with the step number in the message. Requests drawn from −25 to 25 m/s per axis so some exceed the 20 m/s top speed; a_max 10, dt 0.02, 1,000 steps. Control test with seed 43. Sabotage check (run B seed 43 → red) is part of acceptance.
+- **Blockers:** None. Stopped early because I was tired.
+- **Next smallest task:** Write TODO 1 and 2 of `RunTrajectory` (a `Random` from the seed, the start state `new VehicleState(Vec3.Zero, Vec3.Zero)`, and `var trajectory = new List<VehicleState>();` with the start state added), then TODO 3 and 4, then the two tests. Remove the placeholder `throw` and both `Ignore`s as each part is done.
+- **Retrieval question for next session:** Two runs with the same seed end at the same final position. Give one reason that still doesn't prove the runs were identical.
+
 ### 2026-10-16/17 (practice, chat): Sheet 02 Q8 and stopping from top speed
 
 - **What we built:** No code. Worked sheet 02 Q8 (a braking clamp) and a new question in chat: a drone at (20, 0, 0) m/s, top speed 20 m/s, a_max 10 m/s², dt 0.1 s, Control asks for (0, 0, 0). How many steps to stop?
